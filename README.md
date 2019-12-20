@@ -25,5 +25,8 @@ A custom login route can be set up here as well with .formLogin().loginPage("/lo
 In the given example the Index page should be accessible for all users. The protected routes is only visible for
 authenticated users. Therefore users that are not logged in get redirected to the login form.
 
+# Database JPA Users
+Getting users from database. Obviously you need users for that. So that means domain model, repository and service.
+
 ## Read more
 To get the big picture you can start here https://spring.io/guides/topicals/spring-security-architecture/
