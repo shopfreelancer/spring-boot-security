@@ -17,21 +17,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
-        return encoder;
-    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
 
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         auth.inMemoryAuthentication()
-                .passwordEncoder(passwordEncoder())
-                .withUser("spring")
-                .password(passwordEncoder().encode("secret"))
+                .passwordEncoder(encoder)
+                .withUser("admin")
+                .password(encoder.encode("test"))
                 .roles("ADMIN");
     }
 
