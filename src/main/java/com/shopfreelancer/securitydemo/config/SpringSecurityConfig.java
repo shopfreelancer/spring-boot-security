@@ -29,6 +29,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().ignoringAntMatchers("/h2-console/**").disable()
                 .authorizeRequests().antMatchers("/").permitAll()
                 .and().authorizeRequests().antMatchers("/protected").authenticated()
+                .and().authorizeRequests().antMatchers("/admin/**").hasAnyAuthority("ADMIN")
                 .and().formLogin().usernameParameter("name").permitAll()
                 .and().exceptionHandling().accessDeniedPage("/no-access");
     }
