@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Service("userDetailsService")
+
 @Slf4j
 public class SecUserDetailsServiceImpl implements UserDetailsService {
     private UserService userService;

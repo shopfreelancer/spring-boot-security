@@ -3,12 +3,15 @@ package com.shopfreelancer.securitydemo.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -22,6 +25,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    protected void configure(AuthenticationManagerBuilder auth)
+            throws Exception {
+        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        auth.inMemoryAuthentication()
+                .passwordEncoder(passwordEncoder())
+                .withUser("spring")
+                .password(passwordEncoder().encode("secret"))
+                .roles("ADMIN");
+    }
+
+
+    @Override
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/h2-console/**");
     }
@@ -33,7 +48,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().ignoringAntMatchers("/h2-console/**").disable()
                 .authorizeRequests().antMatchers("/").permitAll()
                 .and().authorizeRequests().antMatchers("/protected").authenticated()
-                .and().authorizeRequests().antMatchers("/admin/**").hasAnyAuthority("ADMIN")
+                .and().authorizeRequests().antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .and().formLogin().usernameParameter("name").permitAll()
                 .and().exceptionHandling().accessDeniedPage("/no-access");
     }
