@@ -1,6 +1,6 @@
 package com.shopfreelancer.securitydemo.domain;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,13 +14,10 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private  String role;
+    private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private List<User> users = new ArrayList<>();
-
-    public List<User> getUsers() {
-        return users;
-    }
 }

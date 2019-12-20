@@ -4,6 +4,7 @@ import com.shopfreelancer.securitydemo.domain.Role;
 import com.shopfreelancer.securitydemo.domain.User;
 import com.shopfreelancer.securitydemo.services.RoleService;
 import com.shopfreelancer.securitydemo.services.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -11,7 +12,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
+@Slf4j
 public class Seeder implements ApplicationListener<ContextRefreshedEvent> {
     private UserService userService;
     private RoleService roleService;
@@ -45,10 +50,15 @@ public class Seeder implements ApplicationListener<ContextRefreshedEvent> {
         String hashedPassword1 = passwordEncoder.encode(password1);
         user1.setPassword(hashedPassword1);
 
+        Role adminRole = roleService.findByName("ADMIN");
+        List<Role> roles1 = new ArrayList<>();
+        roles1.add(adminRole);
+        user1.setRoles(roles1);
+
         userService.save(user1);
 
         User user2 = new User();
-        user2.setName("regular");
+        user2.setName("martin");
         user2.setEmail("test2@test.de");
 
         String password2 = "rest";
@@ -56,15 +66,18 @@ public class Seeder implements ApplicationListener<ContextRefreshedEvent> {
         user2.setPassword(hashedPassword2);
 
         userService.save(user2);
+
+
+
     }
 
     private void saveRoles() {
         Role role = new Role();
-        role.setRole("CUSTOMER");
+        role.setName("REGULAR");
         roleService.save(role);
 
         Role adminRole = new Role();
-        adminRole.setRole("ADMIN");
+        adminRole.setName("ADMIN");
         roleService.save(adminRole);
     }
 }
