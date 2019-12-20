@@ -96,5 +96,23 @@ userDetails.setAuthorities(authorities);
 ````
 This is quite simple. It´s a collection with names of roles.
 
+## In Memory authentication
+The most basic custom form of authorization and authentication. Create your own users in memory. Just bear in mind your attaching roles and not 
+authorities so your matchers should look like  .and().authorizeRequests().antMatchers("/admin/**").hasAnyRole("ADMIN")
+
+No database or models needed, only: 
+````
+   @Override
+    protected void configure(AuthenticationManagerBuilder auth)
+            throws Exception {
+        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        auth.inMemoryAuthentication()
+                .passwordEncoder(passwordEncoder())
+                .withUser("spring")
+                .password(passwordEncoder().encode("secret"))
+                .roles("ADMIN");
+    }
+````
+
 ## Read more
 To get the big picture you can start here https://spring.io/guides/topicals/spring-security-architecture/
